@@ -204,32 +204,75 @@ function renderOpportunities(opportunities) {
   elements.opportunitiesBody.innerHTML = "";
 
   opportunities.forEach((opp) => {
+    const [baseCurrency] = opp.pair.split("/");
     const row = document.createElement("tr");
     const profitClass = opp.profit >= 0 ? "positive" : "negative";
+    const crosses = opp.crosses || 1; // Assume que opp.crosses existe
 
     row.innerHTML = `
-            <td>${opp.pair}</td>
-            <td>${opp.spot.exchange.toUpperCase()}: ${formatters.price(
-      opp.spot.price
-    )}</td>
-            <td>${opp.future.exchange.toUpperCase()}: ${formatters.price(
-      opp.future.price
-    )}</td>
-            <td class="profit ${profitClass}">${formatters.profit(
-      opp.profit
-    )}</td>
-            <td>
-                <button class="action-btn" title="Executar trade" onclick="executeTrade('${
-                  opp.pair
-                }')">
-                    <i class="fas fa-exchange-alt"></i>
-                </button>
-            </td>
-        `;
+      <td class="pair">
+        <div class="currency-pair">
+          <i class="${getIconClass(baseCurrency)} currency-icon"></i>
+          <span>${opp.pair}</span>
+        </div>
+      </td>
+      <td class="exchange-data">
+        <div class="exchange-label ${
+          opp.spot.exchange
+        }">${opp.spot.exchange.toUpperCase()}</div>
+        <div class="price">${formatters.price(opp.spot.price)}</div>
+      </td>
+      <td class="exchange-data">
+        <div class="exchange-label ${
+          opp.future.exchange
+        }">${opp.future.exchange.toUpperCase()}</div>
+        <div class="price">${formatters.price(opp.future.price)}</div>
+      </td>
+      <td class="profit ${profitClass}">${formatters.profit(opp.profit)}</td>
+      <td class="crosses">
+        <div class="cross-badge" data-count="${crosses}">
+          <span>${crosses}</span>
+          <div class="cross-tooltip">${crosses} cruzamentos nos últimos 15min</div>
+        </div>
+      </td>
+      <td class="actions">
+        <button class="action-btn" title="Executar trade" onclick="executeTrade('${
+          opp.pair
+        }')">
+          <i class="fas fa-exchange-alt"></i>
+        </button>
+      </td>
+    `;
+
     elements.opportunitiesBody.appendChild(row);
   });
 }
 
+function getIconClass(currency) {
+  const icons = {
+    BTC: "fab fa-bitcoin",
+    ETH: "fab fa-ethereum",
+    USDT: "fas fa-dollar-sign",
+    BNB: "fab fa-bnb",
+    SOL: "fas fa-sun",
+    XRP: "fas fa-bolt",
+  };
+  return icons[currency] || "fas fa-coins";
+}
+
+// Função auxiliar para classificar intensidade de cruzamentos
+function getCrossIntensityClass(count) {
+  if (count >= 10) return "high-frequency";
+  if (count >= 5) return "medium-frequency";
+  return "low-frequency";
+}
+
+// Função auxiliar para classificar intensidade de cruzamentos
+function getCrossIntensityClass(count) {
+  if (count >= 10) return "high-frequency";
+  if (count >= 5) return "medium-frequency";
+  return "low-frequency";
+}
 // Renderiza ordens executadas
 function renderOrders() {
   renderOrderList(elements.entryOrders, state.entryOrders);

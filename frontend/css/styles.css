@@ -167,7 +167,7 @@ body {
   flex: 1;
   background-color: var(--card-bg);
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -472,4 +472,135 @@ th {
     width: 100%;
     justify-content: space-between;
   }
+}
+
+.exchange-label {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Cores específicas para cada exchange */
+.exchange-label.binance {
+  background-color: rgba(240, 185, 11, 0.15);
+  color: #f0b90b; /* Amarelo Binance */
+}
+.exchange-label.bybit {
+  background-color: rgba(0, 168, 150, 0.15);
+  color: #00a896; /* Verde Bybit */
+}
+.exchange-label.htx {
+  background-color: rgba(247, 147, 26, 0.15);
+  color: #f7931a; /* Laranja HTX */
+}
+.exchange-label.mexc {
+  background-color: rgba(0, 174, 240, 0.15);
+  color: #00aef0; /* Azul claro MEXC */
+}
+.exchange-label.kucoin {
+  background-color: rgba(35, 193, 253, 0.15);
+  color: #23c1fd; /* Azul KuCoin */
+}
+.exchange-label.gateio {
+  background-color: rgba(44, 175, 254, 0.15);
+  color: #2caffe; /* Azul Gate.io característico */
+}
+
+/* Exchange adicional - OKX */
+.exchange-label.okx {
+  background-color: rgba(0, 150, 242, 0.15);
+  color: #0096f2; /* Azul OKX */
+}
+
+/* Estilos para ícones */
+.currency-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+  width: 24px;
+  text-align: center;
+  display: inline-block;
+  color: #f0b90b; /* Cor padrão para ícones */
+}
+
+/* Cores específicas para moedas */
+.fa-bitcoin {
+  color: #f7931a;
+}
+.fa-ethereum {
+  color: #627eea;
+}
+.fa-coins {
+  color: #26a17b;
+}
+
+/* Estilos para cruzamentos */
+/* Estilo para a célula de cruzamentos */
+.crosses {
+  text-align: center;
+  padding: 0 10px;
+}
+
+/* Badge moderno */
+.cross-badge {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  cursor: default;
+  transition: transform 0.2s;
+}
+
+/* Cores baseadas na intensidade */
+.cross-badge[data-count="0"] {
+  background: #95a5a6;
+}
+.cross-badge[data-count^="1"],
+.cross-badge[data-count^="2"] {
+  background: #2ecc71;
+}
+.cross-badge[data-count^="3"],
+.cross-badge[data-count^="4"] {
+  background: #f39c12;
+}
+.cross-badge[data-count^="5"] {
+  background: #e74c3c;
+}
+
+/* Tooltip elegante */
+.cross-tooltip {
+  visibility: hidden;
+  width: 160px;
+  background-color: #2c3e50;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.cross-badge:hover .cross-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Efeito hover sutil */
+.cross-badge:hover {
+  transform: scale(1.1);
 }
