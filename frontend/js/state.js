@@ -1,5 +1,5 @@
 // Configurações
-export const WS_URL = "ws://localhost:8080";
+export const WS_URL = "https://arb-crypto-huu8.vercel.app/";
 export const RECONNECT_DELAY = 5000;
 
 // Estado da aplicação
