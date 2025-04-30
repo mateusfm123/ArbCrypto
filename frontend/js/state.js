@@ -1,5 +1,5 @@
 // Configurações
-export const WS_URL = "https://arb-crypto-huu8.vercel.app/";
+export const WS_URL = "wss://sharkcripto.com.br:8090";
 export const RECONNECT_DELAY = 5000;
 
 // Estado da aplicação
