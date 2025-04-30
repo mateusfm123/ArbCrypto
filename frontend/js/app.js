@@ -1,480 +1,153 @@
-// Configurações
-const WS_URL = "ws://localhost:8080"; // Substitua pela sua URL WebSocket
-const RECONNECT_DELAY = 5000; // 5 segundos
+import { FilterSystem } from "./filterSystem.js";
+import { state } from "./state.js";
+import { UIService } from "./uiService.js";
+import { WebSocketService } from "./websocketService.js";
 
-// Estado da aplicação
-const state = {
-  socket: null,
-  status: "connecting",
-  opportunities: [],
-  entryOrders: [],
-  exitOrders: [],
-  stats: {
-    prevCount: 0,
-    active: 0,
-    maxProfit: 0,
-    bestPair: "",
-    totalVolume: 0,
-  },
-  filters: {
-    minProfit: -100,
-    maxProfit: 1000,
-    exchanges: {}, // { "binance": true, "bybit": false }
-    coins: [], // ["BTC/USDT", "ETH/USDT"]
-  },
-};
-
-// Elementos DOM
-const elements = {
-  statusIndicator: document.getElementById("status-indicator"),
-  connectionText: document.getElementById("connection-text"),
-  activeOpp: document.getElementById("active-opp"),
-  maxProfit: document.getElementById("max-profit"),
-  bestPair: document.getElementById("best-pair"),
-  totalVolume: document.getElementById("total-volume"),
-  opportunitiesBody: document.getElementById("opportunities-body"),
-  entryCount: document.getElementById("entry-count"),
-  exitCount: document.getElementById("exit-count"),
-  entryOrders: document.getElementById("entry-orders"),
-  exitOrders: document.getElementById("exit-orders"),
-};
-
-// Formatação de números
-const formatters = {
-  price: (value) => {
-    if (value < 0.0001) return value.toExponential(4);
-    return parseFloat(value.toFixed(8)).toString();
-  },
-  profit: (value) => {
-    const fixed = parseFloat(value.toFixed(2));
-    return (fixed > 0 ? "+" : "") + fixed + "%";
-  },
-  volume: (value) => {
-    if (value >= 1000000) return (value / 1000000).toFixed(1) + "M";
-    if (value >= 1000) return (value / 1000).toFixed(1) + "K";
-    return value.toFixed(2);
-  },
-};
-
-// Conexão WebSocket
-function connectWebSocket() {
-  if (
-    state.socket &&
-    [WebSocket.OPEN, WebSocket.CONNECTING].includes(state.socket.readyState)
-  ) {
-    return;
+class VemCryptoDashboard {
+  static init() {
+    UIService.init();
+    WebSocketService.connect();
+    this.setupEventListeners();
+    this.loadInitialData();
   }
 
-  updateStatus("connecting");
-  state.socket = new WebSocket(WS_URL);
+  static loadInitialData() {
+    // Simulação de dados iniciais
+    state.opportunities = [];
 
-  state.socket.onopen = () => {
-    updateStatus("connected");
-    console.log("Conectado ao WebSocket");
-  };
+    FilterSystem.initExchangeFilters();
+    FilterSystem.initCoinFilters();
+    document.dispatchEvent(new Event("dataUpdated"));
+  }
 
-  state.socket.onclose = () => {
-    updateStatus("disconnected");
-    console.log("Conexão perdida. Tentando reconectar...");
-    setTimeout(connectWebSocket, RECONNECT_DELAY);
-  };
+  static setupEventListeners() {
+    document.addEventListener("statusUpdated", (e) => {
+      UIService.updateStatusIndicator(e.detail);
+    });
 
-  state.socket.onerror = (error) => {
-    console.error("Erro no WebSocket:", error);
-    updateStatus("error");
-  };
+    document.addEventListener("dataUpdated", () => {
+      const filtered = FilterSystem.applyAllFilters();
+      UIService.renderOpportunities(filtered);
+    });
 
-  state.socket.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      processWebSocketMessage(data);
-    } catch (error) {
-      console.error("Erro ao processar mensagem:", error);
-    }
-  };
-}
+    document.addEventListener("statsUpdated", (e) => {
+      UIService.updateStats(e.detail);
+    });
 
-// Processa mensagens do WebSocket
-function processWebSocketMessage(data) {
-  if (Array.isArray(data)) {
-    // Processa oportunidades de arbitragem
-    state.opportunities = data;
-    updateStatistics();
-    updateUI();
-  } else if (data.type === "orders") {
-    // Processa ordens executadas
-    state.entryOrders = data.entry || [];
-    state.exitOrders = data.exit || [];
-    renderOrders();
+    document.addEventListener("filtersUpdated", () => {
+      const filtered = FilterSystem.applyAllFilters();
+      UIService.renderOpportunities(filtered);
+      UIService.updateStats(state.stats);
+    });
   }
 }
 
-// Atualiza estatísticas
-function updateStatistics() {
-  const prevCount = state.stats.active;
-  const currentCount = state.opportunities.length;
+// Initialize when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  VemCryptoDashboard.init();
+});
 
-  state.stats = {
-    prevCount: currentCount,
-    active: currentCount,
-    maxProfit: Math.max(...state.opportunities.map((o) => o.profit)),
-    bestPair: state.opportunities.reduce(
-      (best, o) => (o.profit > best.profit ? o : best),
-      { profit: 0 }
-    ).pair,
-    totalVolume: state.opportunities.reduce(
-      (sum, o) => sum + (o.spot.volume || 0),
-      0
-    ),
+window.executeTrade = (pair, spotExchange, futureExchange) => {
+  const formattedPair = pair.replace("/", "_").toUpperCase();
+
+  const exchangeUrls = {
+    binance: {
+      spot: `https://www.binance.com/en/trade/${formattedPair}`,
+    },
+    gateio: {
+      spot: `https://www.gate.io/trade/${formattedPair}`,
+    },
+    htx: {
+      spot: `https://www.htx.com/trade/${formattedPair.toLowerCase()}_spot`,
+    },
+    mexc: {
+      spot: `https://www.mexc.com/exchange/${formattedPair}`,
+      future: `https://www.mexc.com/futures/${formattedPair}`,
+    },
+    mercadobitcoin: {
+      spot: `https://www.mercadobitcoin.com.br/trade/${formattedPair.replace(
+        "_",
+        "/"
+      )}`,
+    },
+    foxbit: {
+      spot: `https://trade.foxbit.com.br/exchange/${formattedPair.replace(
+        "_",
+        "-"
+      )}`,
+    },
   };
 
-  // Atualiza elemento de mudança
-  const changeElement = document.getElementById("opp-change");
-  const diff = currentCount - prevCount;
-  if (diff > 0) {
-    changeElement.innerHTML = `<i class="fas fa-arrow-up"></i><span>+${diff} novas</span>`;
-  } else if (diff < 0) {
-    changeElement.innerHTML = `<i class="fas fa-arrow-down"></i><span>${diff} menos</span>`;
-  }
-}
+  const updateOrOpenTab = (exchange, type, url) => {
+    const tab = state.openTabs[exchange]?.[type];
 
-// Atualiza a interface do usuário
-function updateUI() {
-  // Aplica filtros
-  const filtered = applyFilters();
-
-  // Atualiza estatísticas com dados filtrados
-  elements.activeOpp.textContent = filtered.length;
-  elements.maxProfit.textContent = formatters.profit(
-    filtered.length > 0 ? Math.max(...filtered.map((o) => o.profit)) : 0
-  );
-  elements.bestPair.textContent =
-    filtered.length > 0
-      ? filtered.reduce((best, o) => (o.profit > best.profit ? o : best), {
-          profit: 0,
-        }).pair
-      : "-";
-  elements.totalVolume.textContent = formatters.volume(
-    filtered.reduce((sum, o) => sum + (o.spot.volume || 0), 0)
-  );
-
-  // Renderiza oportunidades
-  renderOpportunities(filtered);
-
-  // Renderiza ordens
-  renderOrders();
-}
-
-// Aplica filtros atuais
-function applyFilters() {
-  return state.opportunities.filter((opp) => {
-    // Filtro de lucro
-    if (
-      opp.profit < state.filters.minProfit ||
-      opp.profit > state.filters.maxProfit
-    ) {
-      return false;
-    }
-
-    // Filtro de exchange (se pelo menos uma exchange foi desmarcada)
-    if (Object.keys(state.filters.exchanges).length > 0) {
-      const spotAllowed = state.filters.exchanges[opp.spot.exchange] !== false;
-      const futureAllowed =
-        state.filters.exchanges[opp.future.exchange] !== false;
-
-      if (!spotAllowed || !futureAllowed) {
-        return false;
+    if (tab && !tab.closed) {
+      try {
+        tab.location.href = url;
+        tab.focus();
+        return true;
+      } catch (e) {
+        console.warn(
+          `Não foi possível recarregar a aba ${type} da ${exchange}:`,
+          e
+        );
       }
     }
 
-    // Filtro de moedas (se pelo menos uma moeda foi selecionada)
-    if (
-      state.filters.coins.length > 0 &&
-      !state.filters.coins.includes(opp.pair)
-    ) {
-      return false;
+    // Se chegou aqui, precisa abrir nova aba
+    const newTab = window.open(url, `crypto_${exchange}_${type}`);
+    if (state.openTabs[exchange]) {
+      state.openTabs[exchange][type] = newTab;
+    } else {
+      state.openTabs[exchange] = { [type]: newTab };
     }
-
-    return true;
-  });
-}
-
-// Renderiza oportunidades na tabela
-function renderOpportunities(opportunities) {
-  elements.opportunitiesBody.innerHTML = "";
-
-  opportunities.forEach((opp) => {
-    const [baseCurrency] = opp.pair.split("/");
-    const row = document.createElement("tr");
-    const profitClass = opp.profit >= 0 ? "positive" : "negative";
-    const crosses = opp.crosses || 1; // Assume que opp.crosses existe
-
-    row.innerHTML = `
-      <td class="pair">
-        <div class="currency-pair">
-          <i class="${getIconClass(baseCurrency)} currency-icon"></i>
-          <span>${opp.pair}</span>
-        </div>
-      </td>
-      <td class="exchange-data">
-        <div class="exchange-label ${
-          opp.spot.exchange
-        }">${opp.spot.exchange.toUpperCase()}</div>
-        <div class="price">${formatters.price(opp.spot.price)}</div>
-      </td>
-      <td class="exchange-data">
-        <div class="exchange-label ${
-          opp.future.exchange
-        }">${opp.future.exchange.toUpperCase()}</div>
-        <div class="price">${formatters.price(opp.future.price)}</div>
-      </td>
-      <td class="profit ${profitClass}">${formatters.profit(opp.profit)}</td>
-      <td class="crosses">
-        <div class="cross-badge" data-count="${crosses}">
-          <span>${crosses}</span>
-          <div class="cross-tooltip">${crosses} cruzamentos nos últimos 15min</div>
-        </div>
-      </td>
-      <td class="actions">
-        <button class="action-btn" title="Executar trade" onclick="executeTrade('${
-          opp.pair
-        }')">
-          <i class="fas fa-exchange-alt"></i>
-        </button>
-      </td>
-    `;
-
-    elements.opportunitiesBody.appendChild(row);
-  });
-}
-
-function getIconClass(currency) {
-  const icons = {
-    BTC: "fab fa-bitcoin",
-    ETH: "fab fa-ethereum",
-    USDT: "fas fa-dollar-sign",
-    BNB: "fab fa-bnb",
-    SOL: "fas fa-sun",
-    XRP: "fas fa-bolt",
+    return false;
   };
-  return icons[currency] || "fas fa-coins";
-}
 
-// Função auxiliar para classificar intensidade de cruzamentos
-function getCrossIntensityClass(count) {
-  if (count >= 10) return "high-frequency";
-  if (count >= 5) return "medium-frequency";
-  return "low-frequency";
-}
-
-// Função auxiliar para classificar intensidade de cruzamentos
-function getCrossIntensityClass(count) {
-  if (count >= 10) return "high-frequency";
-  if (count >= 5) return "medium-frequency";
-  return "low-frequency";
-}
-// Renderiza ordens executadas
-function renderOrders() {
-  renderOrderList(elements.entryOrders, state.entryOrders);
-  renderOrderList(elements.exitOrders, state.exitOrders);
-
-  elements.entryCount.textContent = state.entryOrders.length;
-  elements.exitCount.textContent = state.exitOrders.length;
-}
-
-function renderOrderList(container, orders) {
-  container.innerHTML = "";
-
-  orders.forEach((order) => {
-    const orderEl = document.createElement("div");
-    orderEl.className = "order-item";
-    const profitClass = order.profit >= 0 ? "positive" : "negative";
-
-    orderEl.innerHTML = `
-            <div class="order-value">${order.pair}</div>
-            <div class="order-value">${formatters.price(order.spotPrice)}</div>
-            <div class="order-value order-profit ${profitClass}">${formatters.profit(
-      order.profit
-    )}</div>
-        `;
-    container.appendChild(orderEl);
-  });
-}
-
-// Atualiza status da conexão
-function updateStatus(status) {
-  state.status = status;
-  elements.statusIndicator.className =
-    "status-indicator" + (status === "connected" ? " connected" : "");
-  elements.connectionText.textContent =
-    status === "connected"
-      ? "Conectado"
-      : status === "connecting"
-      ? "Conectando..."
-      : "Desconectado";
-}
-
-// Funções do sistema de filtros
-function initFilters() {
-  // Configura eventos
-  document
-    .getElementById("open-filters")
-    .addEventListener("click", openFilterModal);
-  document
-    .getElementById("close-modal")
-    .addEventListener("click", closeFilterModal);
-  document
-    .getElementById("cancel-filters")
-    .addEventListener("click", closeFilterModal);
-  document
-    .getElementById("apply-filters")
-    .addEventListener("click", applyFiltersModal);
-  document
-    .getElementById("select-all")
-    .addEventListener("click", selectAllCoins);
-  document
-    .getElementById("deselect-all")
-    .addEventListener("click", deselectAllCoins);
-  document.getElementById("coin-search").addEventListener("input", filterCoins);
-}
-
-function openFilterModal() {
-  // Preenche exchanges disponíveis
-  const exchangesContainer = document.getElementById("exchange-filters");
-  exchangesContainer.innerHTML = "";
-
-  // Obtém todas as exchanges únicas
-  const allExchanges = new Set();
-  state.opportunities.forEach((opp) => {
-    allExchanges.add(opp.spot.exchange);
-    allExchanges.add(opp.future.exchange);
-  });
-
-  // Cria checkboxes para cada exchange
-  Array.from(allExchanges).forEach((ex) => {
-    const isChecked = state.filters.exchanges[ex] !== false;
-    const div = document.createElement("div");
-    div.className = "exchange-filter";
-    div.innerHTML = `
-            <input type="checkbox" id="ex-${ex}" ${isChecked ? "checked" : ""}>
-            <label for="ex-${ex}">${ex.toUpperCase()}</label>
-        `;
-    exchangesContainer.appendChild(div);
-  });
-
-  // Preenche valores atuais
-  document.getElementById("min-profit").value = state.filters.minProfit;
-  document.getElementById("max-profit").value = state.filters.maxProfit;
-
-  // Atualiza lista de moedas
-  updateCoinList();
-
-  // Mostra modal
-  document.getElementById("filter-modal").classList.add("active");
-}
-
-function closeFilterModal() {
-  document.getElementById("filter-modal").classList.remove("active");
-}
-
-function applyFiltersModal() {
-  // Obtém valores dos filtros
-  state.filters.minProfit =
-    parseFloat(document.getElementById("min-profit").value) || -100;
-  state.filters.maxProfit =
-    parseFloat(document.getElementById("max-profit").value) || 1000;
-
-  // Obtém exchanges selecionadas
-  const newExchanges = {};
-  document
-    .querySelectorAll('#exchange-filters input[type="checkbox"]')
-    .forEach((cb) => {
-      const exchange = cb.id.replace("ex-", "");
-      newExchanges[exchange] = cb.checked;
-    });
-  state.filters.exchanges = newExchanges;
-
-  // Obtém moedas selecionadas (apenas as que estão marcadas)
-  state.filters.coins = [];
-  document
-    .querySelectorAll('#coin-list input[type="checkbox"]:checked')
-    .forEach((cb) => {
-      state.filters.coins.push(cb.id.replace("coin-", ""));
-    });
-
-  closeFilterModal();
-
-  // Força a atualização imediata da UI
-  updateUI();
-}
-
-function updateCoinList() {
-  const coinList = document.getElementById("coin-list");
-  coinList.innerHTML = "";
-
-  const allCoins = [...new Set(state.opportunities.map((o) => o.pair))];
-  const searchTerm = document.getElementById("coin-search").value.toLowerCase();
-
-  // Mostra todas as moedas se nenhuma estiver selecionada, caso contrário só as selecionadas
-  const showAll = state.filters.coins.length === 0;
-
-  allCoins
-    .filter((coin) => coin.toLowerCase().includes(searchTerm))
-    .filter((coin) => showAll || state.filters.coins.includes(coin))
-    .forEach((coin) => {
-      const isChecked = showAll || state.filters.coins.includes(coin);
-      const item = document.createElement("div");
-      item.className = "coin-item";
-      item.innerHTML = `
-                <input type="checkbox" id="coin-${coin}" ${
-        isChecked ? "checked" : ""
-      }>
-                <label for="coin-${coin}">${coin}</label>
-            `;
-      coinList.appendChild(item);
-    });
-}
-
-function filterCoins() {
-  updateCoinList();
-}
-
-function selectAllCoins() {
-  document
-    .querySelectorAll('#coin-list input[type="checkbox"]')
-    .forEach((cb) => {
-      cb.checked = true;
-    });
-}
-
-function deselectAllCoins() {
-  document
-    .querySelectorAll('#coin-list input[type="checkbox"]')
-    .forEach((cb) => {
-      cb.checked = false;
-    });
-}
-
-// Função global para executar trades
-window.executeTrade = function (pair) {
-  if (!state.socket || state.socket.readyState !== WebSocket.OPEN) {
-    alert("Erro: Não conectado ao servidor");
-    return;
+  // Gerencia aba spot
+  if (exchangeUrls[spotExchange]?.spot) {
+    updateOrOpenTab(spotExchange, "spot", exchangeUrls[spotExchange].spot);
   }
 
-  // Envia mensagem para executar trade
-  const message = {
-    type: "execute_trade",
-    pair: pair,
-    timestamp: new Date().toISOString(),
-  };
-
-  state.socket.send(JSON.stringify(message));
-  alert(`Ordem enviada para: ${pair}`);
+  // Gerencia aba future
+  if (exchangeUrls[futureExchange]?.future) {
+    updateOrOpenTab(
+      futureExchange,
+      "future",
+      exchangeUrls[futureExchange].future
+    );
+  } else if (exchangeUrls[futureExchange]?.spot) {
+    updateOrOpenTab(
+      futureExchange,
+      "future",
+      exchangeUrls[futureExchange].spot
+    );
+  }
 };
 
-// Inicialização
-window.addEventListener("load", () => {
-  connectWebSocket();
-  initFilters();
+// Alternar entre Dashboard e Exit Table
+document.getElementById("menu-exit").addEventListener("click", () => {
+  // Esconde a tabela de oportunidades
+  document.querySelector(".opportunities-container").style.display = "none";
+  // Exibe a tabela de saída
+  document.getElementById("exit-table-container").style.display = "block";
+
+  // Atualiza a navegação
+  document.getElementById("menu-dashboard").classList.remove("active");
+  document.getElementById("menu-exit").classList.add("active");
+
+  // Filtra e renderiza os dados de saída
+  const filtered = FilterSystem.applyAllFilters();
+  UIService.renderExits(filtered);
+});
+
+document.getElementById("menu-dashboard").addEventListener("click", () => {
+  // Exibe a tabela de oportunidades
+  document.querySelector(".opportunities-container").style.display = "block";
+  // Esconde a tabela de saída
+  document.getElementById("exit-table-container").style.display = "none";
+
+  // Atualiza a navegação
+  document.getElementById("menu-exit").classList.remove("active");
+  document.getElementById("menu-dashboard").classList.add("active");
 });

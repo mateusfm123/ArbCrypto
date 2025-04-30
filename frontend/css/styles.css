@@ -1,3 +1,33 @@
+.action-btn:hover,
+.close-modal:hover,
+.menu-item.active,
+.menu-item:hover,
+body {
+  color: var(--text-primary);
+}
+.logo,
+.profit.positive {
+  color: var(--success);
+}
+.header,
+.order-item,
+.orders-panel h3,
+td,
+th {
+  border-bottom: 1px solid #333;
+}
+.coin-icon,
+.cross-badge,
+.cross-tooltip,
+.crosses,
+.currency-icon {
+  text-align: center;
+}
+.cross-badge,
+.crypto-icon,
+.exchange-icon {
+  vertical-align: middle;
+}
 :root {
   --primary: #2b2d42;
   --secondary: #8d99ae;
@@ -9,221 +39,188 @@
   --text-primary: #ffffff;
   --text-secondary: #b8b8d9;
 }
-
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #0f0f1a;
-  color: var(--text-primary);
   margin: 0;
   padding: 0;
 }
-
 .dashboard {
   display: grid;
   grid-template-columns: 250px 1fr;
   min-height: 100vh;
 }
-
 .sidebar {
   background-color: var(--dark);
   padding: 20px;
   border-right: 1px solid #333;
 }
-
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  font-family: monospace;
+  gap: 20px;
   margin-bottom: 30px;
-  color: var(--success);
 }
-
-.logo i {
-  font-size: 1.5rem;
-}
-
+.connection-status,
+.filter-btn,
+.header-actions,
 .menu-item {
   display: flex;
   align-items: center;
+}
+.logo i {
+  font-size: 1.5rem;
+}
+.menu-item {
   gap: 10px;
   padding: 12px;
   margin-bottom: 5px;
   border-radius: 5px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.3s;
+  transition: 0.3s;
 }
-
 .menu-item:hover {
   background-color: #25253d;
-  color: var(--text-primary);
 }
-
 .menu-item.active {
   background-color: var(--primary);
-  color: var(--text-primary);
 }
-
-.main-content {
+.main-content,
+.stat-card {
   padding: 20px;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #333;
 }
-
 .header-actions {
-  display: flex;
-  align-items: center;
   gap: 15px;
 }
-
-.connection-status {
-  display: flex;
-  align-items: center;
+.connection-status,
+.filter-btn {
   gap: 8px;
+  font-size: 0.9rem;
+}
+.connection-status {
   padding: 8px 16px;
   background-color: var(--card-bg);
   border-radius: 20px;
-  font-size: 0.9rem;
 }
-
 .status-indicator {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: var(--danger);
 }
-
+.coin-actions button,
+.filter-btn {
+  background: var(--primary);
+  cursor: pointer;
+}
 .status-indicator.connected {
   background-color: var(--success);
   box-shadow: 0 0 10px var(--success);
 }
-
 .filter-btn {
-  background: var(--primary);
   border: none;
-  color: white;
+  color: #fff;
   padding: 8px 15px;
   border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
 }
-
+.action-btn,
+.close-modal,
+.filter-group label,
+.stat-card h3,
+th {
+  color: var(--text-secondary);
+}
+.opportunities-container,
+.stat-card {
+  border-radius: 10px;
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.coin-actions button:hover,
 .filter-btn:hover {
   background: #3a3a5e;
 }
-
 .stats-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 20px;
 }
-
-.stat-card {
-  background-color: var(--card-bg);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .stat-card h3 {
   margin-top: 0;
-  color: var(--text-secondary);
   font-size: 0.9rem;
-  font-weight: normal;
+  font-weight: 400;
 }
-
 .stat-card .value {
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 700;
   margin: 10px 0;
 }
-
 .stat-card .change {
   display: flex;
   align-items: center;
   gap: 5px;
   font-size: 0.9rem;
 }
-
 .data-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
   height: calc(100vh - 250px);
 }
-
 .opportunities-container {
   flex: 1;
-  background-color: var(--card-bg);
-  border-radius: 10px;
   padding: 10px;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
 }
-
-th,
-td {
+td,
+th {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #333;
 }
-
 th {
-  color: var(--text-secondary);
-  font-weight: normal;
+  font-weight: 400;
   position: sticky;
-  top: 0;
+  top: 1;
   background-color: var(--card-bg);
 }
-
 .profit {
-  font-weight: bold;
+  font-weight: 700;
 }
-
-.profit.positive {
-  color: var(--success);
-}
-
 .profit.negative {
   color: var(--danger);
 }
-
 .action-btn {
-  background: none;
+  background: 0 0;
   border: none;
-  color: var(--text-secondary);
   cursor: pointer;
   font-size: 1rem;
   margin: 0 5px;
 }
-
-.action-btn:hover {
-  color: var(--text-primary);
+.badge,
+.filter-group label,
+.order-value {
+  font-size: 0.9rem;
 }
-
 .orders-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   height: 300px;
 }
-
 .orders-panel {
   background-color: var(--card-bg);
   border-radius: 10px;
@@ -231,357 +228,234 @@ th {
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .orders-panel h3 {
   display: flex;
   justify-content: space-between;
   margin-top: 0;
   padding-bottom: 10px;
-  border-bottom: 1px solid #333;
 }
-
 .badge {
   background-color: var(--primary);
   padding: 2px 10px;
   border-radius: 10px;
-  font-size: 0.9rem;
 }
-
 .orders-list {
   margin-top: 10px;
 }
-
 .order-item {
   padding: 10px 0;
-  border-bottom: 1px solid #333;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
 }
-
+.coin-item:last-child,
 .order-item:last-child {
   border-bottom: none;
 }
-
-.order-value {
-  font-size: 0.9rem;
-}
-
 .order-profit.positive {
   color: var(--success);
-  font-weight: bold;
+  font-weight: 700;
 }
-
+.btn-secondary,
 .order-profit.negative {
   color: var(--danger);
-  font-weight: bold;
+  font-weight: 700;
 }
-
-/* Filter Modal Styles */
 .filter-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
   align-items: center;
   justify-content: center;
 }
-
-.filter-modal.active {
-  display: flex;
-}
-
 .modal-content {
   background: var(--card-bg);
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
   padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #333;
 }
-
 .close-modal {
-  background: none;
+  background: 0 0;
   border: none;
-  color: var(--text-secondary);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 5px;
 }
-
-.close-modal:hover {
-  color: var(--text-primary);
-}
-
-.filter-group {
-  margin-bottom: 15px;
-}
-
 .filter-group label {
   display: block;
   margin-bottom: 8px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-weight: 500;
 }
-
-.filter-group input[type="number"],
-.filter-group input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  background: #2a2a3d;
-  border: 1px solid #333;
-  border-radius: 5px;
-  color: var(--text-primary);
+.coin-item,
+.exchange-filter,
+.filter-modal.active {
+  display: flex;
 }
-
-.exchange-filters {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
-}
-
 .exchange-filter {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
-.coin-list {
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 10px;
-  border: 1px solid #333;
-  border-radius: 5px;
-}
-
 .coin-item {
-  padding: 8px 12px;
   border-bottom: 1px solid #333;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
-.coin-item:last-child {
-  border-bottom: none;
-}
-
 .coin-actions {
   display: flex;
   gap: 10px;
   margin: 10px 0;
 }
-
 .coin-actions button {
   flex: 1;
   padding: 8px;
-  background: var(--primary);
   border: none;
   border-radius: 5px;
-  color: white;
-  cursor: pointer;
+  color: #fff;
   font-size: 0.9rem;
 }
-
-.coin-actions button:hover {
-  background: #3a3a5e;
-}
-
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
 }
-
 .btn-primary {
-  padding: 10px 20px;
   background: var(--success);
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
 }
-
 .btn-secondary {
-  padding: 10px 20px;
-  background: transparent;
   border: 1px solid var(--danger);
-  border-radius: 5px;
-  color: var(--danger);
-  cursor: pointer;
-  font-weight: bold;
 }
-
+.cross-badge,
+.exchange-label {
+  font-weight: 600;
+  display: inline-block;
+}
 .btn-primary:hover {
   background: #05c191;
 }
-
 .btn-secondary:hover {
   background: rgba(239, 71, 111, 0.1);
 }
-
-/* Responsive Design */
 @media (max-width: 1200px) {
   .stats-container {
     grid-template-columns: 1fr 1fr;
   }
-
   .orders-container {
     grid-template-columns: 1fr;
   }
 }
-
 @media (max-width: 768px) {
-  .dashboard {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
+  .dashboard,
   .stats-container {
     grid-template-columns: 1fr;
   }
-
+  .sidebar {
+    display: none;
+  }
   .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
   }
-
   .header-actions {
     width: 100%;
     justify-content: space-between;
   }
 }
-
 .exchange-label {
-  display: inline-block;
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.8rem;
-  font-weight: 600;
   margin-bottom: 4px;
 }
-
-/* Cores específicas para cada exchange */
 .exchange-label.binance {
   background-color: rgba(240, 185, 11, 0.15);
-  color: #f0b90b; /* Amarelo Binance */
+  color: #f0b90b;
 }
 .exchange-label.bybit {
   background-color: rgba(0, 168, 150, 0.15);
-  color: #00a896; /* Verde Bybit */
+  color: #00a896;
 }
 .exchange-label.htx {
   background-color: rgba(247, 147, 26, 0.15);
-  color: #f7931a; /* Laranja HTX */
+  color: #f7931a;
 }
 .exchange-label.mexc {
   background-color: rgba(0, 174, 240, 0.15);
-  color: #00aef0; /* Azul claro MEXC */
+  color: #00aef0;
 }
 .exchange-label.kucoin {
   background-color: rgba(35, 193, 253, 0.15);
-  color: #23c1fd; /* Azul KuCoin */
+  color: #23c1fd;
 }
 .exchange-label.gateio {
   background-color: rgba(44, 175, 254, 0.15);
-  color: #2caffe; /* Azul Gate.io característico */
+  color: #2caffe;
 }
-
-/* Exchange adicional - OKX */
 .exchange-label.okx {
   background-color: rgba(0, 150, 242, 0.15);
-  color: #0096f2; /* Azul OKX */
+  color: #0096f2;
 }
-
-/* Estilos para ícones */
 .currency-icon {
-  font-size: 1.2rem;
-  margin-right: 8px;
-  width: 24px;
-  text-align: center;
   display: inline-block;
-  color: #f0b90b; /* Cor padrão para ícones */
+  color: #f0b90b;
 }
-
-/* Cores específicas para moedas */
-.fa-bitcoin {
-  color: #f7931a;
-}
-.fa-ethereum {
-  color: #627eea;
-}
-.fa-coins {
+.fa-coins,
+.fa-dollar-sign {
   color: #26a17b;
 }
-
-/* Estilos para cruzamentos */
-/* Estilo para a célula de cruzamentos */
 .crosses {
-  text-align: center;
   padding: 0 10px;
 }
-
-/* Badge moderno */
 .cross-badge {
   position: relative;
-  display: inline-block;
   width: 26px;
   height: 26px;
   line-height: 26px;
   border-radius: 50%;
   font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
+  color: #000;
   background: linear-gradient(135deg, #6e8efb, #a777e3);
   cursor: default;
   transition: transform 0.2s;
+  margin-left: -100px;
 }
-
-/* Cores baseadas na intensidade */
 .cross-badge[data-count="0"] {
   background: #95a5a6;
 }
-.cross-badge[data-count^="1"],
-.cross-badge[data-count^="2"] {
+.cross-badge[data-count="1"],
+.cross-badge[data-count="2"],
+.cross-badge[data-count="3"],
+.cross-badge[data-count="4"],
+.cross-badge[data-count="5"] {
+  background: #3498db;
+}
+.cross-badge[data-count="10"],
+.cross-badge[data-count="6"],
+.cross-badge[data-count="7"],
+.cross-badge[data-count="8"],
+.cross-badge[data-count="9"] {
   background: #2ecc71;
 }
-.cross-badge[data-count^="3"],
-.cross-badge[data-count^="4"] {
-  background: #f39c12;
-}
-.cross-badge[data-count^="5"] {
+.cross-badge[data-count="11"],
+.cross-badge[data-count="12"],
+.cross-badge[data-count="13"],
+.cross-badge[data-count="14"],
+.cross-badge[data-count="15"] {
   background: #e74c3c;
 }
-
-/* Tooltip elegante */
 .cross-tooltip {
   visibility: hidden;
   width: 160px;
   background-color: #2c3e50;
   color: #fff;
-  text-align: center;
   border-radius: 6px;
   padding: 5px;
   position: absolute;
@@ -592,15 +466,434 @@ th {
   opacity: 0;
   transition: opacity 0.3s;
   font-size: 0.8rem;
-  font-weight: normal;
+  font-weight: 400;
+  pointer-events: none;
 }
-
+.coin-icon,
+.currency-icon {
+  width: 20px;
+}
+.crypto-icon,
+.currency-icon {
+  font-size: 1.2em;
+  margin-right: 8px;
+}
 .cross-badge:hover .cross-tooltip {
   visibility: visible;
   opacity: 1;
 }
-
-/* Efeito hover sutil */
 .cross-badge:hover {
   transform: scale(1.1);
+}
+.btn-close {
+  background-color: var(--danger);
+  color: #fff;
+  border: none;
+}
+.btn-details {
+  background-color: transparent;
+  border: 1px solid var(--secondary);
+  color: var(--text-secondary);
+}
+.exchange-data .volume {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 2px;
+}
+.coin-icon {
+  margin-right: 10px;
+  color: #f7931a;
+}
+.fa-bnb {
+  color: #f3ba2f;
+}
+.positive .fa-arrow-up {
+  color: #4caf50;
+  margin-left: 5px;
+}
+.negative .fa-arrow-down {
+  color: #f44336;
+  margin-left: 5px;
+}
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.exchange-filter,
+.filter-modal {
+  align-items: center;
+}
+.crypto-icon {
+  width: 20px;
+  height: 20px;
+}
+.fa-bitcoin {
+  color: #f7931a;
+}
+.fa-ethereum {
+  color: #627eea;
+}
+.fa-user-secret {
+  color: #4e4e4e;
+}
+.fa-bank {
+  color: #2962ff;
+}
+.fa-dog {
+  color: #c2a633;
+}
+.fa-robot {
+  color: #ff5722;
+}
+.pair-icon {
+  position: relative;
+  display: inline-block;
+}
+.base-icon {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+.quote-icon {
+  position: absolute;
+  left: 12px;
+  opacity: 0.7;
+}
+.filter-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+}
+.modal-content {
+  background: #2a3042;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: #fff;
+}
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid #3a4055;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-body {
+  padding: 16px;
+}
+.filter-group {
+  margin-bottom: 20px;
+}
+.filter-group input[type="number"],
+.filter-group input[type="text"] {
+  color: var(--text-primary);
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #3a4055;
+  background: #1e2233;
+  color: #fff;
+}
+.exchange-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+.coin-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 8px;
+  border: 1px solid #3a4055;
+  border-radius: 4px;
+  padding: 8px;
+}
+.coin-item {
+  padding: 6px;
+  align-items: center;
+}
+.coin-item:hover {
+  background: #3a4055;
+}
+.modal-actions {
+  padding: 16px;
+  border-top: 1px solid #3a4055;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.btn-primary,
+.btn-secondary {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #4c6ef5;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+.btn-secondary {
+  background: 0 0;
+  color: #a2a8c3;
+  border: 1px solid #3a4055;
+  border-radius: 4px;
+}
+.exchange-icon {
+  opacity: 0.7;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 8px;
+}
+.exchange-label.mexc .exchange-icon {
+  background-image: url("../assets/img/exchanges/mexc-logo.png");
+}
+.exchange-label.gateio .exchange-icon {
+  background-image: url("../assets/img/exchanges/gateio-logo.png");
+}
+.exchange-label.htx .exchange-icon {
+  background-image: url("../assets/img/exchanges/htx-logo.png");
+}
+.exchange-label.binance .exchange-icon {
+  background-image: url("../assets/img/exchanges/binance-logo.png");
+}
+/* Estilos do Modal */
+.filter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background-color: #2a3042;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #3a4055;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #fff;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Estilos dos Grupos de Filtro */
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #b8c1d9;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.filter-group input[type="number"],
+.filter-group input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #363d4f;
+  border: 1px solid #3a4055;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.filter-group input[type="number"]:focus,
+.filter-group input[type="text"]:focus {
+  outline: none;
+  border-color: #5468ff;
+}
+
+/* Estilos para os Filtros de Exchange */
+.exchange-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.exchange-filters label {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 8px 10px;
+  background-color: #363d4f;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.exchange-filters label:hover {
+  background-color: #3a4055;
+}
+
+.exchange-filters input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Estilos para a Lista de Moedas */
+.coin-actions {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.coin-actions button {
+  flex: 1;
+  padding: 8px;
+  background-color: #363d4f;
+  border: none;
+  border-radius: 6px;
+  color: #b8c1d9;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s;
+}
+
+.coin-actions button:hover {
+  background-color: #3a4055;
+}
+
+.coin-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #3a4055;
+  border-radius: 6px;
+  background-color: #363d4f;
+}
+
+.coin-list div {
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #3a4055;
+  cursor: pointer;
+}
+
+.coin-list div:last-child {
+  border-bottom: none;
+}
+
+.coin-list div:hover {
+  background-color: #3a4055;
+}
+
+/* Estilos para os Botões de Ação */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 20px;
+  border-top: 1px solid #3a4055;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid #5468ff;
+  border-radius: 6px;
+  color: #5468ff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(84, 104, 255, 0.1);
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  background-color: #5468ff;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #3a52ff;
+}
+
+/* Barra de rolagem personalizada */
+.coin-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.coin-list::-webkit-scrollbar-track {
+  background: #363d4f;
+  border-radius: 3px;
+}
+
+.coin-list::-webkit-scrollbar-thumb {
+  background: #5468ff;
+  border-radius: 3px;
+}
+
+.coin-list::-webkit-scrollbar-thumb:hover {
+  background: #3a52ff;
 }

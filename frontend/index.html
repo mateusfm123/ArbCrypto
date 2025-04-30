@@ -3,15 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crypto Arbitrage Pro</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/cryptocoins-icons@2.9.0/webfont/cryptocoins.css"
-    />
+    <title>VemCrypto</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -24,15 +16,15 @@
       <div class="sidebar">
         <div class="logo">
           <i class="fas fa-chart-line"></i>
-          <h1>Arbitrage Pro</h1>
+          <h1>VemCrypto</h1>
         </div>
-        <div class="menu-item active">
-          <i class="fas fa-chart-bar"></i>
-          <span>Dashboard</span>
+        <div class="menu-item active" id="menu-dashboard">
+          <i class="fas fa-random"></i>
+          <span>Entrada</span>
         </div>
-        <div class="menu-item">
-          <i class="fas fa-bell"></i>
-          <span>Alertas</span>
+        <div class="menu-item" id="menu-exit">
+          <i class="fas fa-random"></i>
+          <span>Saida</span>
         </div>
       </div>
 
@@ -79,45 +71,39 @@
           </div>
         </div>
 
-        <!-- Data Section -->
-        <div class="data-section">
-          <!-- Opportunities Table -->
-          <div class="opportunities-container">
-            <table id="opportunities-table">
-              <thead>
-                <tr>
-                  <th>Moedas</th>
-                  <th>Spot (Exchange/Preço)</th>
-                  <th>Futuro (Exchange/Preço)</th>
-                  <th>Lucro</th>
-                  <th>Cruzamento (15Min)</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="opportunities-body"></tbody>
-            </table>
-          </div>
+       <!-- Tabela de Oportunidades -->
+<div class="opportunities-container" id="opportunities-table-container">
+  <table id="opportunities-table" class="opportunities-table">
+    <thead>
+      <tr>
+        <th>Moedas</th>
+        <th>Spot (Menor Preço)</th>
+        <th>Futuro (Maior Preço)</th>
+        <th>Lucro</th>
+        <th>Cruzamento (15Min)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="opportunities-body"></tbody>
+  </table>
+</div>
 
-          <!-- Orders Section -->
-          <div class="orders-container">
-            <div class="orders-panel">
-              <h3>
-                <span>Ordens de Entrada</span>
-                <span class="badge" id="entry-count">0</span>
-              </h3>
-              <div class="orders-list" id="entry-orders"></div>
-            </div>
-            <div class="orders-panel">
-              <h3>
-                <span>Ordens de Saída</span>
-                <span class="badge" id="exit-count">0</span>
-              </h3>
-              <div class="orders-list" id="exit-orders"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Tabela de Saída (inicialmente oculta) -->
+<div class="opportunities-container" id="exit-table-container" style="display:none;">
+  <table id="exit-table" class="opportunities-table">
+    <thead>
+      <tr>
+        <th>Moedas</th>
+        <th>Spot (Menor Preço)</th>
+        <th>Futuro (Maior Preço)</th>
+        <th>Lucro</th>
+        <th>Cruzamento (15Min)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="exit-body"></tbody>
+  </table>
+</div>
 
     <!-- Filter Modal -->
     <div class="filter-modal" id="filter-modal">
@@ -176,6 +162,6 @@
       </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
